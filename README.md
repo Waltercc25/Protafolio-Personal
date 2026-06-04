@@ -1,6 +1,8 @@
 # Portafolio — Walter Cantor
 
-Portafolio profesional construido con Next.js, TypeScript y Tailwind CSS.
+Portafolio profesional que describe mi experiencia con tecnologías del mercado y el aprendizaje de 5 años en la universidad, especializado en **servidores, cloud, automatización, SQL, Linux** y más.
+
+Construido con **Next.js**, **TypeScript** y **Tailwind CSS**.
 
 ## Desarrollo local
 
