@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { posts } from "@/data/posts";
+import { getAllPosts } from "@/lib/content";
 import { formatDate } from "@/lib/utils";
 import { SectionTitle } from "@/components/SectionTitle";
+import { ContentEmptyState } from "@/components/ContentEmptyState";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -10,6 +11,8 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPage() {
+  const posts = getAllPosts();
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
       <Link
@@ -25,36 +28,44 @@ export default function BlogPage() {
         description="Artículos y guías documentadas durante mi aprendizaje."
       />
 
-      <ul className="mt-12 space-y-6">
-        {posts.map((post) => (
-          <li key={post.slug}>
-            <article className="rounded-2xl border border-border bg-card p-6 shadow-card transition-colors hover:border-accent/40">
-              <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                <span className="rounded-md border border-border bg-muted px-2 py-0.5 font-mono">
-                  {post.category}
-                </span>
-                <time dateTime={post.date}>{formatDate(post.date)}</time>
-                <span>· {post.readTime}</span>
-              </div>
-              <h2 className="mt-3 text-xl font-semibold">
+      {posts.length > 0 ? (
+        <ul className="mt-12 space-y-6">
+          {posts.map((post) => (
+            <li key={post.slug}>
+              <article className="rounded-2xl border border-border bg-card p-6 shadow-card transition-colors hover:border-accent/40">
+                <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                  <span className="rounded-md border border-border bg-muted px-2 py-0.5 font-mono">
+                    {post.category}
+                  </span>
+                  <time dateTime={post.date}>{formatDate(post.date)}</time>
+                  <span>· {post.readTime}</span>
+                </div>
+                <h2 className="mt-3 text-xl font-semibold">
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    className="text-foreground transition-colors hover:text-accent"
+                  >
+                    {post.title}
+                  </Link>
+                </h2>
+                <p className="mt-2 text-muted-foreground">{post.description}</p>
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="text-foreground transition-colors hover:text-accent"
+                  className="mt-4 inline-flex text-sm font-medium text-accent hover:underline"
                 >
-                  {post.title}
+                  Leer artículo →
                 </Link>
-              </h2>
-              <p className="mt-2 text-muted-foreground">{post.description}</p>
-              <Link
-                href={`/blog/${post.slug}`}
-                className="mt-4 inline-flex text-sm font-medium text-accent hover:underline"
-              >
-                Leer artículo →
-              </Link>
-            </article>
-          </li>
-        ))}
-      </ul>
+              </article>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <ContentEmptyState
+          title="Artículos en preparación"
+          description="El blog está configurado con MDX. Cuando escribas tu primera nota técnica, aparecerá aquí automáticamente."
+          hint="Crea content/blog/mi-articulo.mdx basándote en _template.post.mdx"
+        />
+      )}
     </div>
   );
 }

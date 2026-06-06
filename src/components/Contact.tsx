@@ -46,13 +46,15 @@ export function Contact() {
             </li>
           </ul>
 
-          <a
-            href={siteConfig.cvPath}
-            download
-            className="mt-8 inline-flex items-center justify-center rounded-lg bg-accent px-8 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
-          >
-            Descargar CV
-          </a>
+          {siteConfig.cvAvailable && (
+            <a
+              href={siteConfig.cvPath}
+              download
+              className="mt-8 inline-flex items-center justify-center rounded-lg bg-accent px-8 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
+            >
+              Descargar CV
+            </a>
+          )}
         </div>
       </div>
     </section>

@@ -7,16 +7,44 @@ export type ProjectCategory =
   | "Bases de datos"
   | "Virtualización";
 
-export interface Project {
-  slug: string;
+/** Frontmatter estándar para content/projects/*.mdx */
+export interface ProjectFrontmatter {
   title: string;
   description: string;
-  technologies: string[];
-  status: ProjectStatus;
+  date: string;
   category: ProjectCategory;
+  status: ProjectStatus;
+  technologies: string[];
   github?: string;
   demo?: string;
   featured?: boolean;
+  /** false = borrador; no aparece en listados ni rutas estáticas */
+  published?: boolean;
+}
+
+export interface Project extends ProjectFrontmatter {
+  slug: string;
+}
+
+/** Frontmatter estándar para content/blog/*.mdx */
+export interface BlogFrontmatter {
+  title: string;
+  description: string;
+  date: string;
+  category: string;
+  readTime: string;
+  featured?: boolean;
+  published?: boolean;
+}
+
+export interface BlogPost extends BlogFrontmatter {
+  slug: string;
+}
+
+export interface ContentHeading {
+  id: string;
+  text: string;
+  level: 2 | 3;
 }
 
 export interface SkillCategory {
@@ -31,16 +59,6 @@ export interface Lab {
   topics: string[];
 }
 
-export interface BlogPost {
-  slug: string;
-  title: string;
-  description: string;
-  date: string;
-  category: string;
-  readTime: string;
-  featured?: boolean;
-}
-
 export interface SiteConfig {
   name: string;
   title: string;
@@ -49,4 +67,11 @@ export interface SiteConfig {
   github: string;
   linkedin: string;
   cvPath: string;
+  /** Activa botones de descarga de CV cuando exista public/cv.pdf */
+  cvAvailable: boolean;
+}
+
+export interface ContentFlags {
+  hasProjects: boolean;
+  hasBlogPosts: boolean;
 }

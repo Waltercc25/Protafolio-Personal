@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { getFeaturedProjects } from "@/data/projects";
+import { getFeaturedProjects } from "@/lib/content";
 import { SectionTitle } from "./SectionTitle";
 import { ProjectCard } from "./ProjectCard";
+import { ContentEmptyState } from "./ContentEmptyState";
 
 export function Projects() {
   const featured = getFeaturedProjects();
@@ -13,21 +14,31 @@ export function Projects() {
           <SectionTitle
             eyebrow="Portafolio"
             title="Proyectos destacados"
-            description="Casos reales y en desarrollo con enfoque en automatización, cloud e infraestructura."
+            description="Casos reales documentados con enfoque en automatización, cloud e infraestructura."
           />
-          <Link
-            href="/proyectos"
-            className="shrink-0 self-start rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-accent/50 hover:text-accent sm:self-auto"
-          >
-            Ver todos →
-          </Link>
+          {featured.length > 0 && (
+            <Link
+              href="/proyectos"
+              className="shrink-0 self-start rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-accent/50 hover:text-accent sm:self-auto"
+            >
+              Ver todos →
+            </Link>
+          )}
         </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {featured.map((project) => (
-            <ProjectCard key={project.slug} project={project} />
-          ))}
-        </div>
+        {featured.length > 0 ? (
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
+            {featured.map((project) => (
+              <ProjectCard key={project.slug} project={project} />
+            ))}
+          </div>
+        ) : (
+          <ContentEmptyState
+            title="Próximamente"
+            description="Estoy preparando los casos de estudio de mis proyectos. El entorno ya está listo para publicarlos en MDX."
+            hint="Los proyectos con featured: true en content/projects/*.mdx aparecerán aquí."
+          />
+        )}
       </div>
     </section>
   );

@@ -6,7 +6,8 @@ export const siteConfig: SiteConfig = {
   description:
     "Construyo laboratorios, automatizaciones y soluciones prácticas usando Linux, cloud, n8n, APIs y bases de datos.",
   email: "cantorclaros@gmail.com",
-  github: "https://github.com/Waltercc25?tab=repositories",
+  github: "https://github.com/Waltercc25",
   linkedin: "https://linkedin.com/in/waltercantor",
   cvPath: "/cv.pdf",
+  cvAvailable: false,
 };

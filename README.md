@@ -1,8 +1,6 @@
 # Portafolio — Walter Cantor
 
-Portafolio profesional que describe mi experiencia con tecnologías del mercado y el aprendizaje de 5 años en la universidad, especializado en **servidores, cloud, automatización, SQL, Linux** y más.
-
-Construido con **Next.js**, **TypeScript** y **Tailwind CSS**.
+Portafolio profesional con **Next.js 15**, **TypeScript**, **Tailwind CSS** y contenido gestionado por **MDX**.
 
 ## Desarrollo local
 
@@ -13,22 +11,47 @@ npm run dev
 
 Abre [http://localhost:3000](http://localhost:3000).
 
-## Estructura
+## Publicar contenido (MDX)
 
-- `src/app` — App Router (páginas)
-- `src/components` — UI reutilizable
-- `src/data` — Datos estáticos (fase 1)
-- `content/` — Carpeta preparada para MDX (fase 2)
-- `public/cv.pdf` — Añade tu CV aquí
-
-## Personalización
-
-Edita `src/data/site.ts` con tu email, GitHub y LinkedIn reales.
-
-## Despliegue en Vercel
-
-Conecta el repositorio en [vercel.com](https://vercel.com) o usa la CLI:
+Los proyectos y artículos viven en `content/` como archivos `.mdx`. No hace falta tocar React para añadir contenido nuevo.
 
 ```bash
-npx vercel
+# Proyecto → /proyectos/mi-proyecto
+content/projects/mi-proyecto.mdx
+
+# Artículo → /blog/mi-articulo
+content/blog/mi-articulo.mdx
+```
+
+Plantillas listas para copiar:
+
+- `content/projects/_template.project.mdx`
+- `content/blog/_template.post.mdx`
+
+Guía completa: [`content/README.md`](content/README.md)
+
+## Estructura
+
+```
+content/              ← Proyectos y blog (MDX)
+src/lib/content/      ← Lectura, validación y compilación MDX
+src/components/mdx/   ← Callout, CodeBlock, estilos prose
+src/data/site.ts      ← Config global (email, redes, cvAvailable)
+```
+
+## Configuración
+
+| Archivo | Qué editar |
+|---------|------------|
+| `src/data/site.ts` | Nombre, email, GitHub, LinkedIn, `cvAvailable` |
+| `public/cv.pdf` | Tu CV (activar `cvAvailable: true` cuando exista) |
+
+## Despliegue
+
+Push a `main` → Vercel despliega automáticamente.
+
+```bash
+git add .
+git commit -m "tu mensaje"
+git push
 ```

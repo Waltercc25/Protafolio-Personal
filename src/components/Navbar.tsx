@@ -48,13 +48,15 @@ export function Navbar() {
           >
             Proyectos
           </Link>
-          <a
-            href={siteConfig.cvPath}
-            download
-            className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
-          >
-            CV
-          </a>
+          {siteConfig.cvAvailable && (
+            <a
+              href={siteConfig.cvPath}
+              download
+              className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
+            >
+              CV
+            </a>
+          )}
         </div>
 
         <button
@@ -100,13 +102,15 @@ export function Navbar() {
             >
               Ver todos los proyectos
             </Link>
-            <a
-              href={siteConfig.cvPath}
-              download
-              className="rounded-lg bg-accent px-4 py-2 text-center text-sm font-semibold text-accent-foreground"
-            >
-              Descargar CV
-            </a>
+            {siteConfig.cvAvailable && (
+              <a
+                href={siteConfig.cvPath}
+                download
+                className="rounded-lg bg-accent px-4 py-2 text-center text-sm font-semibold text-accent-foreground"
+              >
+                Descargar CV
+              </a>
+            )}
           </li>
         </ul>
       </div>

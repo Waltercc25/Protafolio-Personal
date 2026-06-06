@@ -36,13 +36,15 @@ export function Hero() {
           >
             Ver proyectos
           </Link>
-          <a
-            href={siteConfig.cvPath}
-            download
-            className="inline-flex items-center justify-center rounded-lg border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:border-accent/50"
-          >
-            Descargar CV
-          </a>
+          {siteConfig.cvAvailable && (
+            <a
+              href={siteConfig.cvPath}
+              download
+              className="inline-flex items-center justify-center rounded-lg border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:border-accent/50"
+            >
+              Descargar CV
+            </a>
+          )}
           <a
             href={siteConfig.github}
             target="_blank"

@@ -1,0 +1,53 @@
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
+import GithubSlugger from "github-slugger";
+import type { ContentHeading } from "@/types";
+import { TEMPLATE_PREFIX } from "./constants";
+
+export function getContentDir(type: "projects" | "blog"): string {
+  return path.join(process.cwd(), type === "projects" ? "content/projects" : "content/blog");
+}
+
+export function listMdxFiles(dir: string): string[] {
+  if (!fs.existsSync(dir)) return [];
+
+  return fs
+    .readdirSync(dir)
+    .filter((file) => file.endsWith(".mdx") && !file.startsWith(TEMPLATE_PREFIX))
+    .sort();
+}
+
+export function readMdxFile(dir: string, filename: string): { slug: string; raw: string; data: Record<string, unknown>; content: string } {
+  const filePath = path.join(dir, filename);
+  const raw = fs.readFileSync(filePath, "utf8");
+  const { data, content } = matter(raw);
+  const slug = filename.replace(/\.mdx$/, "");
+
+  return { slug, raw, data, content };
+}
+
+export function isPublished(data: Record<string, unknown>): boolean {
+  return data.published !== false;
+}
+
+export function extractHeadings(mdxBody: string): ContentHeading[] {
+  const slugger = new GithubSlugger();
+  const headings: ContentHeading[] = [];
+  const regex = /^(#{2,3})\s+(.+)$/gm;
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(mdxBody)) !== null) {
+    const level = match[1].length as 2 | 3;
+    const text = match[2].replace(/\{#.+\}$/, "").trim();
+    headings.push({ id: slugger.slug(text), text, level });
+  }
+
+  return headings;
+}
+
+export function estimateReadTime(mdxBody: string): string {
+  const words = mdxBody.trim().split(/\s+/).filter(Boolean).length;
+  const minutes = Math.max(1, Math.ceil(words / 200));
+  return `${minutes} min`;
+}
