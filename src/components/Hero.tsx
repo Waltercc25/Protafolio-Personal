@@ -10,9 +10,8 @@ export function Hero() {
   return (
     <section
       id="inicio"
-      className="relative overflow-hidden border-b border-border py-20 sm:py-28 lg:py-32"
+      className="relative overflow-hidden border-b border-border bg-transparent py-20 sm:py-28 lg:py-32"
     >
-      <div className="absolute inset-0 grid-pattern opacity-30" />
       <div className="absolute -top-40 right-0 h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
       <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
 

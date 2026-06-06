@@ -22,6 +22,11 @@
   --nav-glow-bg: rgba(56, 189, 248, 0.14);
   --nav-glow-ring: rgba(34, 211, 238, 0.35);
   --nav-glow-text: #38bdf8;
+  --grid-line-strong: rgba(56, 189, 248, 0.75);
+  --cursor-well: rgba(0, 0, 0, 0.45);
+  --cursor-well-mid: rgba(0, 0, 0, 0.18);
+  --cursor-glow: rgba(34, 211, 238, 0.35);
+  --cursor-glow-ring: rgba(56, 189, 248, 0.65);
 }
 
 /* Tema claro — colores suaves, sin blanco puro */
@@ -43,6 +48,11 @@
   --nav-glow-bg: rgba(14, 165, 233, 0.12);
   --nav-glow-ring: rgba(6, 182, 212, 0.28);
   --nav-glow-text: #0284c7;
+  --grid-line-strong: rgba(6, 182, 212, 0.65);
+  --cursor-well: rgba(100, 116, 139, 0.35);
+  --cursor-well-mid: rgba(100, 116, 139, 0.14);
+  --cursor-glow: rgba(14, 165, 233, 0.28);
+  --cursor-glow-ring: rgba(6, 182, 212, 0.5);
 }
 
 html {
@@ -51,9 +61,9 @@ html {
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background: transparent;
   font-family: var(--font-geist-sans), system-ui, sans-serif;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 ::selection {
@@ -74,6 +84,13 @@ body {
     background-image:
       linear-gradient(var(--grid-line) 1px, transparent 1px),
       linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .grid-pattern-strong {
+    background-image:
+      linear-gradient(var(--grid-line-strong) 1.5px, transparent 1.5px),
+      linear-gradient(90deg, var(--grid-line-strong) 1.5px, transparent 1.5px);
     background-size: 48px 48px;
   }
 

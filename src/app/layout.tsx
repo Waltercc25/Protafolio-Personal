@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ThemeScript } from "@/components/ThemeScript";
+import { InteractiveBackground } from "@/components/InteractiveBackground";
 import { AppProviders } from "@/providers/AppProviders";
 import { siteConfig } from "@/data/site";
 import "./globals.css";
@@ -53,12 +54,16 @@ export default function RootLayout({
         <ThemeScript />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased bg-background text-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased text-foreground`}
       >
         <AppProviders>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
+          {/* Rejilla kinética — siempre DETRÁS del contenido (z-0) */}
+          <InteractiveBackground />
+          <div className="relative z-10 flex min-h-screen flex-col">
+            <Navbar />
+            <main className="relative z-10 flex-1 bg-transparent">{children}</main>
+            <Footer />
+          </div>
         </AppProviders>
       </body>
     </html>

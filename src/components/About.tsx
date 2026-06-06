@@ -7,7 +7,7 @@ export function About() {
   const t = useTranslations();
 
   return (
-    <section id="sobre-mi" className="border-b border-border py-20 sm:py-24">
+    <section id="sobre-mi" className="border-b border-border bg-transparent py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <SectionTitle
           eyebrow={t.about.eyebrow}

@@ -15,7 +15,7 @@ export function Projects({ projects }: ProjectsProps) {
   const t = useTranslations();
 
   return (
-    <section id="proyectos" className="border-b border-border py-20 sm:py-24">
+    <section id="proyectos" className="border-b border-border bg-transparent py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <SectionTitle
