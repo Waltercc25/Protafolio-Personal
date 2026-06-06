@@ -1,34 +1,42 @@
+"use client";
+
 import Link from "next/link";
-import { getFeaturedPosts } from "@/lib/content";
+import type { BlogPost } from "@/types";
 import { formatDate } from "@/lib/utils";
 import { SectionTitle } from "./SectionTitle";
 import { ContentEmptyState } from "./ContentEmptyState";
+import { useLocale, useTranslations } from "@/providers/LocaleProvider";
 
-export function BlogPreview() {
-  const featured = getFeaturedPosts();
+interface BlogPreviewProps {
+  posts: BlogPost[];
+}
+
+export function BlogPreview({ posts }: BlogPreviewProps) {
+  const t = useTranslations();
+  const { locale } = useLocale();
 
   return (
     <section id="blog" className="border-b border-border py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <SectionTitle
-            eyebrow="Notas técnicas"
-            title="Blog"
-            description="Artículos sobre Linux, cloud, automatización y bases de datos."
+            eyebrow={t.blog.eyebrow}
+            title={t.blog.title}
+            description={t.blog.description}
           />
-          {featured.length > 0 && (
+          {posts.length > 0 && (
             <Link
               href="/blog"
               className="shrink-0 self-start rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-accent/50 hover:text-accent sm:self-auto"
             >
-              Ver todos →
+              {t.blog.viewAll}
             </Link>
           )}
         </div>
 
-        {featured.length > 0 ? (
+        {posts.length > 0 ? (
           <div className="mt-12 grid gap-6 md:grid-cols-2">
-            {featured.map((post) => (
+            {posts.map((post) => (
               <article
                 key={post.slug}
                 className="group rounded-2xl border border-border bg-card p-6 shadow-card transition-all hover:border-accent/40"
@@ -37,7 +45,7 @@ export function BlogPreview() {
                   <span className="rounded-md border border-border bg-muted px-2 py-0.5 font-mono">
                     {post.category}
                   </span>
-                  <time dateTime={post.date}>{formatDate(post.date)}</time>
+                  <time dateTime={post.date}>{formatDate(post.date, locale)}</time>
                   <span>· {post.readTime}</span>
                 </div>
                 <h3 className="mt-4 text-lg font-semibold text-foreground group-hover:text-accent transition-colors">
@@ -50,16 +58,16 @@ export function BlogPreview() {
                   href={`/blog/${post.slug}`}
                   className="mt-4 inline-flex text-sm font-medium text-accent hover:underline"
                 >
-                  Leer artículo →
+                  {t.blog.readArticle}
                 </Link>
               </article>
             ))}
           </div>
         ) : (
           <ContentEmptyState
-            title="Notas técnicas en camino"
-            description="Documentaré labs, despliegues y aprendizajes aquí. Solo hay que crear un archivo .mdx en content/blog/."
-            hint="Usa content/blog/_template.post.mdx como punto de partida."
+            title={t.blog.emptyTitle}
+            description={t.blog.emptyDescription}
+            hint={t.blog.emptyHint}
           />
         )}
       </div>

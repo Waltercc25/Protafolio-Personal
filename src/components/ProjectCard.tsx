@@ -1,18 +1,23 @@
+"use client";
+
 import Link from "next/link";
 import type { Project } from "@/types";
 import { getStatusColor, cn } from "@/lib/utils";
 import { TechBadge } from "./TechBadge";
+import { useTranslations } from "@/providers/LocaleProvider";
 
 interface ProjectCardProps {
   project: Project;
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
+  const t = useTranslations();
+
   return (
     <article className="group flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-card transition-all hover:border-accent/40 hover:shadow-glow">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <span className="rounded-md border border-border bg-muted px-2.5 py-1 font-mono text-xs text-muted-foreground">
-          {project.category}
+          {t.projectCategories[project.category]}
         </span>
         <span
           className={cn(
@@ -20,7 +25,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
             getStatusColor(project.status)
           )}
         >
-          {project.status}
+          {t.projectStatus[project.status]}
         </span>
       </div>
 
@@ -43,7 +48,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           href={`/proyectos/${project.slug}`}
           className="inline-flex items-center justify-center rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
         >
-          Ver caso de estudio
+          {t.projects.viewCaseStudy}
         </Link>
         {project.github && (
           <a
@@ -52,7 +57,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center rounded-lg border border-border px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
           >
-            Repositorio
+            {t.projects.repository}
           </a>
         )}
       </div>

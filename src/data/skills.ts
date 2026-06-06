@@ -2,23 +2,23 @@ import type { SkillCategory } from "@/types";
 
 export const skillCategories: SkillCategory[] = [
   {
-    name: "Infraestructura",
+    id: "infrastructure",
     skills: ["Linux", "Ubuntu Server", "KVM/QEMU", "Proxmox", "Docker"],
   },
   {
-    name: "Cloud",
+    id: "cloud",
     skills: ["AWS", "Google Cloud", "Compute Engine", "VPC", "IAM"],
   },
   {
-    name: "Automatización",
+    id: "automation",
     skills: ["n8n", "APIs", "Webhooks", "Evolution API", "Gmail API"],
   },
   {
-    name: "Bases de datos",
+    id: "databases",
     skills: ["PostgreSQL", "MySQL", "Neon"],
   },
   {
-    name: "Herramientas",
+    id: "tools",
     skills: ["Git", "GitHub", "Cursor", "VS Code", "Vercel"],
   },
 ];

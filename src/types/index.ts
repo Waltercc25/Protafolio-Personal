@@ -47,8 +47,15 @@ export interface ContentHeading {
   level: 2 | 3;
 }
 
+export type SkillCategoryId =
+  | "infrastructure"
+  | "cloud"
+  | "automation"
+  | "databases"
+  | "tools";
+
 export interface SkillCategory {
-  name: string;
+  id: SkillCategoryId;
   skills: string[];
 }
 

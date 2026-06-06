@@ -1,8 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import type { BlogPost, ContentHeading } from "@/types";
 import { formatDate } from "@/lib/utils";
 import { MdxProse } from "@/components/mdx";
 import { TableOfContents } from "@/components/mdx/TableOfContents";
+import { useLocale, useTranslations } from "@/providers/LocaleProvider";
 
 interface BlogPostLayoutProps {
   post: BlogPost;
@@ -11,13 +14,16 @@ interface BlogPostLayoutProps {
 }
 
 export function BlogPostLayout({ post, content, headings }: BlogPostLayoutProps) {
+  const t = useTranslations();
+  const { locale } = useLocale();
+
   return (
     <article className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
       <Link
         href="/blog"
         className="mb-8 inline-flex text-sm text-muted-foreground transition-colors hover:text-accent"
       >
-        ← Todos los artículos
+        {t.blog.backToAll}
       </Link>
 
       <div className="lg:grid lg:grid-cols-[1fr_240px] lg:gap-12">
@@ -26,8 +32,10 @@ export function BlogPostLayout({ post, content, headings }: BlogPostLayoutProps)
             <span className="rounded-md border border-border bg-muted px-2.5 py-1 font-mono text-xs">
               {post.category}
             </span>
-            <time dateTime={post.date}>{formatDate(post.date)}</time>
-            <span>· {post.readTime} de lectura</span>
+            <time dateTime={post.date}>{formatDate(post.date, locale)}</time>
+            <span>
+              · {post.readTime} {t.blog.readTime}
+            </span>
           </div>
 
           <h1 className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">

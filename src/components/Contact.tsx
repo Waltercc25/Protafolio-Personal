@@ -1,21 +1,24 @@
+"use client";
+
 import { siteConfig } from "@/data/site";
 import { SectionTitle } from "./SectionTitle";
+import { useTranslations } from "@/providers/LocaleProvider";
 
 export function Contact() {
+  const t = useTranslations();
+
   return (
     <section id="contacto" className="py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <SectionTitle
-          eyebrow="Contacto"
-          title="¿Hablamos?"
-          description="Abierto a oportunidades, prácticas, colaboraciones y feedback sobre mi trabajo."
+          eyebrow={t.contact.eyebrow}
+          title={t.contact.title}
+          description={t.contact.description}
           align="center"
         />
 
         <div className="mx-auto mt-12 max-w-xl rounded-2xl border border-border bg-card p-8 shadow-card text-center">
-          <p className="text-muted-foreground">
-            Puedes escribirme o revisar mi trabajo en los siguientes enlaces.
-          </p>
+          <p className="text-muted-foreground">{t.contact.body}</p>
 
           <ul className="mt-8 space-y-4">
             <li>
@@ -52,7 +55,7 @@ export function Contact() {
               download
               className="mt-8 inline-flex items-center justify-center rounded-lg bg-accent px-8 py-3 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-90"
             >
-              Descargar CV
+              {t.contact.downloadCv}
             </a>
           )}
         </div>

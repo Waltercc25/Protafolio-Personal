@@ -1,11 +1,12 @@
+import type { Locale } from "@/i18n";
 import type { ProjectStatus } from "@/types";
 
 export function cn(...classes: (string | boolean | undefined | null)[]): string {
   return classes.filter(Boolean).join(" ");
 }
 
-export function formatDate(date: string): string {
-  return new Intl.DateTimeFormat("es-ES", {
+export function formatDate(date: string, locale: Locale = "es"): string {
+  return new Intl.DateTimeFormat(locale === "en" ? "en-US" : "es-ES", {
     year: "numeric",
     month: "long",
     day: "numeric",

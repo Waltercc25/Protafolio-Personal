@@ -1,10 +1,12 @@
+"use client";
+
 import Link from "next/link";
-import type { Project } from "@/types";
+import type { Project, ContentHeading } from "@/types";
 import { getStatusColor, cn } from "@/lib/utils";
 import { TechBadge } from "@/components/TechBadge";
 import { MdxProse } from "@/components/mdx";
 import { TableOfContents } from "@/components/mdx/TableOfContents";
-import type { ContentHeading } from "@/types";
+import { useTranslations } from "@/providers/LocaleProvider";
 
 interface ProjectLayoutProps {
   project: Project;
@@ -13,20 +15,22 @@ interface ProjectLayoutProps {
 }
 
 export function ProjectLayout({ project, content, headings }: ProjectLayoutProps) {
+  const t = useTranslations();
+
   return (
     <article className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
       <Link
         href="/proyectos"
         className="mb-8 inline-flex text-sm text-muted-foreground transition-colors hover:text-accent"
       >
-        ← Todos los proyectos
+        {t.projects.backToAll}
       </Link>
 
       <div className="lg:grid lg:grid-cols-[1fr_240px] lg:gap-12">
         <div>
           <div className="flex flex-wrap gap-3">
             <span className="rounded-md border border-border bg-muted px-2.5 py-1 font-mono text-xs text-muted-foreground">
-              {project.category}
+              {t.projectCategories[project.category]}
             </span>
             <span
               className={cn(
@@ -34,7 +38,7 @@ export function ProjectLayout({ project, content, headings }: ProjectLayoutProps
                 getStatusColor(project.status)
               )}
             >
-              {project.status}
+              {t.projectStatus[project.status]}
             </span>
           </div>
 
@@ -60,7 +64,7 @@ export function ProjectLayout({ project, content, headings }: ProjectLayoutProps
                 rel="noopener noreferrer"
                 className="rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground hover:opacity-90"
               >
-                Repositorio
+                {t.projects.repository}
               </a>
             )}
             {project.demo && (
@@ -70,7 +74,7 @@ export function ProjectLayout({ project, content, headings }: ProjectLayoutProps
                 rel="noopener noreferrer"
                 className="rounded-lg border border-border px-6 py-3 text-sm font-medium hover:border-accent/50"
               >
-                Demo en vivo
+                {t.projects.liveDemo}
               </a>
             )}
           </div>

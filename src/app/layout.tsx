@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { ThemeScript } from "@/components/ThemeScript";
+import { AppProviders } from "@/providers/AppProviders";
 import { siteConfig } from "@/data/site";
 import "./globals.css";
 
@@ -46,13 +48,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className="scroll-smooth">
+    <html lang="es" className="scroll-smooth" suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased bg-background text-foreground`}
       >
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <AppProviders>
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+        </AppProviders>
       </body>
     </html>
   );

@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { siteConfig } from "@/data/site";
+import { useTranslations } from "@/providers/LocaleProvider";
 
 export function Hero() {
+  const t = useTranslations();
+
   return (
     <section
       id="inicio"
@@ -14,7 +19,7 @@ export function Hero() {
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-4 py-1.5 font-mono text-xs text-muted-foreground backdrop-blur-sm">
           <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
-          Disponible para oportunidades y colaboraciones
+          {t.hero.availability}
         </p>
 
         <h1 className="max-w-4xl text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
@@ -22,11 +27,11 @@ export function Hero() {
         </h1>
 
         <p className="mt-6 max-w-2xl text-xl font-medium text-foreground/90 sm:text-2xl">
-          {siteConfig.title}
+          {t.site.title}
         </p>
 
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-          {siteConfig.description}
+          {t.site.description}
         </p>
 
         <div className="mt-10 flex flex-wrap gap-3">
@@ -34,7 +39,7 @@ export function Hero() {
             href="/proyectos"
             className="inline-flex items-center justify-center rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground shadow-glow transition-opacity hover:opacity-90"
           >
-            Ver proyectos
+            {t.hero.viewProjects}
           </Link>
           {siteConfig.cvAvailable && (
             <a
@@ -42,7 +47,7 @@ export function Hero() {
               download
               className="inline-flex items-center justify-center rounded-lg border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:border-accent/50"
             >
-              Descargar CV
+              {t.hero.downloadCv}
             </a>
           )}
           <a

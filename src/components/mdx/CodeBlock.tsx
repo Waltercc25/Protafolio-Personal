@@ -16,7 +16,7 @@ export function CodeBlock({ title, language, children, className }: CodeBlockPro
           {title && language && <span className="opacity-60">{language}</span>}
         </figcaption>
       )}
-      <pre className="overflow-x-auto bg-[#070b12] p-4 text-sm leading-relaxed">
+      <pre className="overflow-x-auto bg-[var(--code-block)] p-4 text-sm leading-relaxed">
         <code>{children}</code>
       </pre>
     </figure>
