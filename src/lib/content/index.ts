@@ -1,6 +1,24 @@
 import type { ContentFlags } from "@/types";
-import { hasPublishedProjects, getAllProjects, getFeaturedProjects, getProjectBySlug, getProjectSource } from "./projects";
-import { hasPublishedPosts, getAllPosts, getFeaturedPosts, getPostBySlug, getPostSource } from "./blog";
+import {
+  hasPublishedProjects,
+  getAllProjects,
+  getAllProjectsByLocale,
+  getFeaturedProjects,
+  getFeaturedProjectsByLocale,
+  getProjectBySlug,
+  getProjectSource,
+  getProjectSources,
+} from "./projects";
+import {
+  hasPublishedPosts,
+  getAllPosts,
+  getAllPostsByLocale,
+  getFeaturedPosts,
+  getFeaturedPostsByLocale,
+  getPostBySlug,
+  getPostSource,
+  getPostSources,
+} from "./blog";
 import { compileMdxSource } from "./mdx";
 import { extractHeadings } from "./parser";
 import { CONTENT_DIRS } from "./constants";
@@ -8,13 +26,19 @@ import { CONTENT_DIRS } from "./constants";
 export {
   CONTENT_DIRS,
   getAllProjects,
+  getAllProjectsByLocale,
   getFeaturedProjects,
+  getFeaturedProjectsByLocale,
   getProjectBySlug,
   getProjectSource,
+  getProjectSources,
   getAllPosts,
+  getAllPostsByLocale,
   getFeaturedPosts,
+  getFeaturedPostsByLocale,
   getPostBySlug,
   getPostSource,
+  getPostSources,
   compileMdxSource,
   extractHeadings,
 };

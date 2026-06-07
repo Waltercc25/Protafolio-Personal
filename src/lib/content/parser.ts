@@ -2,11 +2,16 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import GithubSlugger from "github-slugger";
+import type { Locale } from "@/i18n";
+import { defaultLocale } from "@/i18n";
 import type { ContentHeading } from "@/types";
 import { TEMPLATE_PREFIX } from "./constants";
 
-export function getContentDir(type: "projects" | "blog"): string {
-  return path.join(process.cwd(), type === "projects" ? "content/projects" : "content/blog");
+export type ContentType = "projects" | "blog";
+
+export function getContentDir(type: ContentType, locale: Locale = defaultLocale): string {
+  const base = type === "projects" ? "content/projects" : "content/blog";
+  return path.join(process.cwd(), base, locale);
 }
 
 export function listMdxFiles(dir: string): string[] {
@@ -18,7 +23,38 @@ export function listMdxFiles(dir: string): string[] {
     .sort();
 }
 
-export function readMdxFile(dir: string, filename: string): { slug: string; raw: string; data: Record<string, unknown>; content: string } {
+export function listContentSlugs(type: ContentType): string[] {
+  return listMdxFiles(getContentDir(type, defaultLocale)).map((file) =>
+    file.replace(/\.mdx$/, "")
+  );
+}
+
+export function resolveMdxFile(
+  type: ContentType,
+  slug: string,
+  locale: Locale
+): { dir: string; filename: string } | null {
+  const filename = `${slug}.mdx`;
+  const localeDir = getContentDir(type, locale);
+
+  if (listMdxFiles(localeDir).includes(filename)) {
+    return { dir: localeDir, filename };
+  }
+
+  if (locale !== defaultLocale) {
+    const fallbackDir = getContentDir(type, defaultLocale);
+    if (listMdxFiles(fallbackDir).includes(filename)) {
+      return { dir: fallbackDir, filename };
+    }
+  }
+
+  return null;
+}
+
+export function readMdxFile(
+  dir: string,
+  filename: string
+): { slug: string; raw: string; data: Record<string, unknown>; content: string } {
   const filePath = path.join(dir, filename);
   const raw = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(raw);

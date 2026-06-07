@@ -2,18 +2,21 @@
 
 import Link from "next/link";
 import type { BlogPost } from "@/types";
+import type { Locale } from "@/i18n";
+import { defaultLocale } from "@/i18n";
 import { formatDate } from "@/lib/utils";
 import { SectionTitle } from "@/components/SectionTitle";
 import { ContentEmptyState } from "@/components/ContentEmptyState";
 import { useLocale, useTranslations } from "@/providers/LocaleProvider";
 
 interface BlogPageContentProps {
-  posts: BlogPost[];
+  postsByLocale: Record<Locale, BlogPost[]>;
 }
 
-export function BlogPageContent({ posts }: BlogPageContentProps) {
+export function BlogPageContent({ postsByLocale }: BlogPageContentProps) {
   const t = useTranslations();
   const { locale } = useLocale();
+  const posts = postsByLocale[locale] ?? postsByLocale[defaultLocale];
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">

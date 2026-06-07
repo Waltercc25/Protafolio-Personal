@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export type ProjectStatus = "En desarrollo" | "Documentado" | "Planeado" | "Completado";
 
 export type ProjectCategory =
@@ -6,7 +8,6 @@ export type ProjectCategory =
   | "Cloud"
   | "Bases de datos"
   | "Virtualización";
-
 /** Frontmatter estándar para content/projects/*.mdx */
 export interface ProjectFrontmatter {
   title: string;
@@ -81,4 +82,10 @@ export interface SiteConfig {
 export interface ContentFlags {
   hasProjects: boolean;
   hasBlogPosts: boolean;
+}
+
+export interface MdxPageVersion<T> {
+  meta: T;
+  content: ReactNode;
+  headings: ContentHeading[];
 }

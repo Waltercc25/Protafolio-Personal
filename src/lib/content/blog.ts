@@ -1,5 +1,13 @@
+import type { Locale } from "@/i18n";
+import { defaultLocale, locales } from "@/i18n";
 import type { BlogPost, BlogFrontmatter } from "@/types";
-import { getContentDir, isPublished, listMdxFiles, readMdxFile, estimateReadTime } from "./parser";
+import {
+  estimateReadTime,
+  isPublished,
+  listContentSlugs,
+  readMdxFile,
+  resolveMdxFile,
+} from "./parser";
 
 function parseBlogFrontmatter(
   slug: string,
@@ -34,43 +42,59 @@ function parseBlogFrontmatter(
   };
 }
 
-function loadAllPosts(includeUnpublished = false): BlogPost[] {
-  const dir = getContentDir("blog");
-  const files = listMdxFiles(dir);
+function loadPost(slug: string, locale: Locale, includeUnpublished = false): BlogPost | null {
+  const resolved = resolveMdxFile("blog", slug, locale);
+  if (!resolved) return null;
 
-  return files
-    .map((file) => {
-      const { slug, data, content } = readMdxFile(dir, file);
-      if (!includeUnpublished && !isPublished(data)) return null;
+  const { data, content } = readMdxFile(resolved.dir, resolved.filename);
+  if (!includeUnpublished && !isPublished(data)) return null;
 
-      const frontmatter = parseBlogFrontmatter(slug, data, content);
-      if (!frontmatter) return null;
+  const frontmatter = parseBlogFrontmatter(slug, data, content);
+  if (!frontmatter) return null;
 
-      return { slug, ...frontmatter };
-    })
+  return { slug, ...frontmatter };
+}
+
+function loadAllPosts(locale: Locale, includeUnpublished = false): BlogPost[] {
+  return listContentSlugs("blog")
+    .map((slug) => loadPost(slug, locale, includeUnpublished))
     .filter((p): p is BlogPost => p !== null)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    .sort((a, b) => b.date.localeCompare(a.date));
 }
 
-export function getAllPosts(): BlogPost[] {
-  return loadAllPosts(false);
+export function getAllPosts(locale: Locale = defaultLocale): BlogPost[] {
+  return loadAllPosts(locale, false);
 }
 
-export function getFeaturedPosts(): BlogPost[] {
-  return getAllPosts().filter((p) => p.featured);
+export function getAllPostsByLocale(): Record<Locale, BlogPost[]> {
+  return Object.fromEntries(locales.map((locale) => [locale, getAllPosts(locale)])) as Record<
+    Locale,
+    BlogPost[]
+  >;
 }
 
-export function getPostBySlug(slug: string): BlogPost | undefined {
-  return getAllPosts().find((p) => p.slug === slug);
+export function getFeaturedPosts(locale: Locale = defaultLocale): BlogPost[] {
+  return getAllPosts(locale).filter((p) => p.featured);
 }
 
-export function getPostSource(slug: string): { frontmatter: BlogPost; body: string } | null {
-  const dir = getContentDir("blog");
-  const filename = `${slug}.mdx`;
+export function getFeaturedPostsByLocale(): Record<Locale, BlogPost[]> {
+  return Object.fromEntries(
+    locales.map((locale) => [locale, getFeaturedPosts(locale)])
+  ) as Record<Locale, BlogPost[]>;
+}
 
-  if (!listMdxFiles(dir).includes(filename)) return null;
+export function getPostBySlug(slug: string, locale: Locale = defaultLocale): BlogPost | undefined {
+  return getAllPosts(locale).find((p) => p.slug === slug);
+}
 
-  const { data, content } = readMdxFile(dir, filename);
+export function getPostSource(
+  slug: string,
+  locale: Locale = defaultLocale
+): { frontmatter: BlogPost; body: string } | null {
+  const resolved = resolveMdxFile("blog", slug, locale);
+  if (!resolved) return null;
+
+  const { data, content } = readMdxFile(resolved.dir, resolved.filename);
   if (!isPublished(data)) return null;
 
   const frontmatter = parseBlogFrontmatter(slug, data, content);
@@ -79,6 +103,14 @@ export function getPostSource(slug: string): { frontmatter: BlogPost; body: stri
   return { frontmatter: { slug, ...frontmatter }, body: content };
 }
 
+export function getPostSources(
+  slug: string
+): Record<Locale, { frontmatter: BlogPost; body: string } | null> {
+  return Object.fromEntries(
+    locales.map((locale) => [locale, getPostSource(slug, locale)])
+  ) as Record<Locale, { frontmatter: BlogPost; body: string } | null>;
+}
+
 export function hasPublishedPosts(): boolean {
-  return getAllPosts().length > 0;
+  return getAllPosts(defaultLocale).length > 0;
 }

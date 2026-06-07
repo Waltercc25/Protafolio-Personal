@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getAllProjects } from "@/lib/content";
+import { getAllProjectsByLocale } from "@/lib/content";
 import { ProyectosPageContent } from "@/components/content/ProyectosPageContent";
 
 export const metadata: Metadata = {
@@ -8,6 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default function ProyectosPage() {
-  const projects = getAllProjects();
-  return <ProyectosPageContent projects={projects} />;
+  const projectsByLocale = getAllProjectsByLocale();
+  return <ProyectosPageContent projectsByLocale={projectsByLocale} />;
 }

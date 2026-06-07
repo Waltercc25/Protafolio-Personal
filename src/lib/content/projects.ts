@@ -1,3 +1,5 @@
+import type { Locale } from "@/i18n";
+import { defaultLocale, locales } from "@/i18n";
 import type { Project, ProjectFrontmatter } from "@/types";
 import {
   CONTENT_DIRS,
@@ -5,10 +7,10 @@ import {
   PROJECT_STATUSES,
 } from "./constants";
 import {
-  getContentDir,
   isPublished,
-  listMdxFiles,
+  listContentSlugs,
   readMdxFile,
+  resolveMdxFile,
 } from "./parser";
 
 function parseProjectFrontmatter(
@@ -53,44 +55,59 @@ function parseProjectFrontmatter(
   };
 }
 
-function loadAllProjects(includeUnpublished = false): Project[] {
-  const dir = getContentDir("projects");
-  const files = listMdxFiles(dir);
+function loadProject(slug: string, locale: Locale, includeUnpublished = false): Project | null {
+  const resolved = resolveMdxFile("projects", slug, locale);
+  if (!resolved) return null;
 
-  return files
-    .map((file) => {
-      const { slug, data } = readMdxFile(dir, file);
-      if (!includeUnpublished && !isPublished(data)) return null;
+  const { data } = readMdxFile(resolved.dir, resolved.filename);
+  if (!includeUnpublished && !isPublished(data)) return null;
 
-      const frontmatter = parseProjectFrontmatter(slug, data);
-      if (!frontmatter) return null;
+  const frontmatter = parseProjectFrontmatter(slug, data);
+  if (!frontmatter) return null;
 
-      return { slug, ...frontmatter };
-    })
+  return { slug, ...frontmatter };
+}
+
+function loadAllProjects(locale: Locale, includeUnpublished = false): Project[] {
+  return listContentSlugs("projects")
+    .map((slug) => loadProject(slug, locale, includeUnpublished))
     .filter((p): p is Project => p !== null)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    .sort((a, b) => b.date.localeCompare(a.date));
 }
 
-export function getAllProjects(): Project[] {
-  return loadAllProjects(false);
+export function getAllProjects(locale: Locale = defaultLocale): Project[] {
+  return loadAllProjects(locale, false);
 }
 
-export function getFeaturedProjects(): Project[] {
-  return getAllProjects().filter((p) => p.featured);
+export function getAllProjectsByLocale(): Record<Locale, Project[]> {
+  return Object.fromEntries(locales.map((locale) => [locale, getAllProjects(locale)])) as Record<
+    Locale,
+    Project[]
+  >;
 }
 
-export function getProjectBySlug(slug: string): Project | undefined {
-  return getAllProjects().find((p) => p.slug === slug);
+export function getFeaturedProjects(locale: Locale = defaultLocale): Project[] {
+  return getAllProjects(locale).filter((p) => p.featured);
 }
 
-export function getProjectSource(slug: string): { frontmatter: Project; body: string } | null {
-  const dir = getContentDir("projects");
-  const filename = `${slug}.mdx`;
-  const filePath = `${dir}/${filename}`;
+export function getFeaturedProjectsByLocale(): Record<Locale, Project[]> {
+  return Object.fromEntries(
+    locales.map((locale) => [locale, getFeaturedProjects(locale)])
+  ) as Record<Locale, Project[]>;
+}
 
-  if (!listMdxFiles(dir).includes(filename)) return null;
+export function getProjectBySlug(slug: string, locale: Locale = defaultLocale): Project | undefined {
+  return getAllProjects(locale).find((p) => p.slug === slug);
+}
 
-  const { data, content } = readMdxFile(dir, filename);
+export function getProjectSource(
+  slug: string,
+  locale: Locale = defaultLocale
+): { frontmatter: Project; body: string } | null {
+  const resolved = resolveMdxFile("projects", slug, locale);
+  if (!resolved) return null;
+
+  const { data, content } = readMdxFile(resolved.dir, resolved.filename);
   if (!isPublished(data)) return null;
 
   const frontmatter = parseProjectFrontmatter(slug, data);
@@ -99,8 +116,16 @@ export function getProjectSource(slug: string): { frontmatter: Project; body: st
   return { frontmatter: { slug, ...frontmatter }, body: content };
 }
 
+export function getProjectSources(
+  slug: string
+): Record<Locale, { frontmatter: Project; body: string } | null> {
+  return Object.fromEntries(
+    locales.map((locale) => [locale, getProjectSource(slug, locale)])
+  ) as Record<Locale, { frontmatter: Project; body: string } | null>;
+}
+
 export function hasPublishedProjects(): boolean {
-  return getAllProjects().length > 0;
+  return getAllProjects(defaultLocale).length > 0;
 }
 
 export { CONTENT_DIRS };

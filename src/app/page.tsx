@@ -5,20 +5,20 @@ import { Projects } from "@/components/Projects";
 import { Labs } from "@/components/Labs";
 import { BlogPreview } from "@/components/BlogPreview";
 import { Contact } from "@/components/Contact";
-import { getFeaturedPosts, getFeaturedProjects } from "@/lib/content";
+import { getFeaturedPostsByLocale, getFeaturedProjectsByLocale } from "@/lib/content";
 
 export default function HomePage() {
-  const featuredProjects = getFeaturedProjects();
-  const featuredPosts = getFeaturedPosts();
+  const featuredProjects = getFeaturedProjectsByLocale();
+  const featuredPosts = getFeaturedPostsByLocale();
 
   return (
     <>
       <Hero />
       <About />
       <Skills />
-      <Projects projects={featuredProjects} />
+      <Projects projectsByLocale={featuredProjects} />
       <Labs />
-      <BlogPreview posts={featuredPosts} />
+      <BlogPreview postsByLocale={featuredPosts} />
       <Contact />
     </>
   );

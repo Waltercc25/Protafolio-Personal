@@ -1,0 +1,155 @@
+---
+title: "Creating a Google Cloud VM and Installing n8n"
+description: "My experience deploying n8n on a Linux virtual machine in Google Cloud using Docker, EasyPanel, and PostgreSQL."
+date: "2026-06-06"
+category: "Cloud"
+readTime: "10 min"
+featured: true
+published: true
+---
+
+## Introduction
+
+One of the projects that helped me the most to understand cloud infrastructure and server administration was deploying **n8n** on a virtual machine in **Google Cloud**.
+
+The main goal was to have my own platform for building automations, connecting APIs, integrating databases, and experimenting with productivity tools. Beyond learning n8n itself, this project gave me hands-on experience with Linux, Docker, networking, firewalls, databases, and cloud services.
+
+## Why Google Cloud?
+
+[Google Cloud](https://cloud.google.com/) offers a complete environment for deploying applications and services. An important advantage for beginners is that new users receive **promotional credits** that make it possible to experiment with different services without a significant upfront investment.
+
+That makes it easier to build personal labs and learning projects in an environment similar to what is used in professional settings.
+
+## Creating the virtual machine
+
+For this project I used **Google Compute Engine**. The initial setup was:
+
+- **Debian** as the operating system
+- Remote access via **SSH**
+- A **public IP address**
+- Enough resources to run automation services
+
+Once the VM was created, I connected over SSH to start setting up the environment:
+
+```bash
+gcloud compute ssh instance-name --zone=us-central1-a
+```
+
+<Callout variant="tip" title="Good practice from the start">
+  Reserve a **static IP** in Compute Engine before configuring webhooks or external integrations. Later I explain why I learned this the hard way.
+</Callout>
+
+## Installing Docker and EasyPanel
+
+After preparing the server, I installed **Docker** as the container platform. Then I deployed **[EasyPanel](https://easypanel.io/)**, a tool that simplifies managing self-hosted services and applications through an intuitive graphical interface.
+
+Thanks to EasyPanel, I was able to deploy n8n without manually managing each container, which made service administration much easier.
+
+## Deploying n8n
+
+Once EasyPanel was configured, I created the corresponding project for n8n. In this first stage I **did not use a custom domain**; instead I configured access through the VM's **public IP**, which allowed me to test and develop quickly.
+
+I also configured **HTTPS** to add a security layer and protect information transmitted between connected services.
+
+## PostgreSQL integration
+
+To store data I used **PostgreSQL** through **[Neon](https://neon.tech/)**, a managed PostgreSQL solution that connects easily to external applications.
+
+The integration was relatively straightforward:
+
+1. Create the database in Neon.
+2. Obtain the connection string.
+3. Configure credentials inside n8n.
+4. Use PostgreSQL nodes to query and store information.
+
+This architecture let me **separate the automation layer from the data persistence layer**, a decision that simplifies maintenance and future migrations.
+
+## Technologies used
+
+| Technology | Role |
+| --- | --- |
+| Google Cloud | Cloud infrastructure |
+| Compute Engine | Virtual machine |
+| Debian Linux | Operating system |
+| Docker | Containers |
+| EasyPanel | Service management |
+| n8n | Workflow automation |
+| PostgreSQL | Relational database |
+| Neon | Managed PostgreSQL hosting |
+| Cursor (MCP) | AI integration and testing |
+| Gmail | Email delivery |
+| JavaScript | Custom logic in nodes |
+
+## Issues encountered and lessons learned
+
+One of the most interesting parts of the project was dealing with real infrastructure problems.
+
+### IP address changes
+
+At first I did not configure a static IP for the virtual machine. Every time I suspended the VM to reduce costs, Google Cloud assigned a **new IP address** when the instance restarted.
+
+That caused some services to stop working correctly:
+
+- Webhook URLs
+- Integration settings
+- External connections
+- Endpoints used by other services
+
+<Callout variant="warning" title="Key lesson">
+  If your service depends on webhooks or external integrations, a dynamic IP can break configurations that previously worked. Reserving a static IP or using a domain with updated DNS prevents these incidents.
+</Callout>
+
+Although confusing at first, it became an excellent learning opportunity about networking, infrastructure, and service administration.
+
+### Firewall configuration
+
+Another important challenge was configuring **firewall rules**. Some external integrations could not communicate with services hosted on the VM.
+
+After investigating, I understood that I needed to create specific rules to allow inbound traffic to the ports used by the applications. This experience helped me better understand how network rules and security work in cloud environments.
+
+### External integrations
+
+During development I connected several services:
+
+- PostgreSQL (Neon)
+- Gmail
+- External APIs
+- Cursor via MCP
+
+Each integration required validating credentials, connectivity, and specific settings to ensure stable operation.
+
+## Results
+
+By the end of the project I had:
+
+- Deployed n8n on cloud infrastructure
+- Managed services through EasyPanel
+- Used Docker in a real environment
+- Integrated PostgreSQL via Neon
+- Configured HTTPS
+- Built working automations
+- Understood firewall, networking, and infrastructure concepts
+- Connected external tools through APIs and webhooks
+
+## Lessons learned
+
+This project strengthened my knowledge of Linux, server administration, Google Cloud, Docker, automation with n8n, PostgreSQL, networking, and troubleshooting in cloud environments.
+
+Beyond installing a tool, the experience helped me understand **how the components interact** in a modern cloud-based solution: compute, containers, data persistence, networking, and security.
+
+## Next steps
+
+Some improvements I plan to implement:
+
+- Configure a **static IP**
+- Use a **custom domain**
+- Implement **basic monitoring**
+- Automate **backups**
+- Deploy additional services on the same infrastructure
+- Create separate environments for **testing** and **production**
+
+## Conclusion
+
+Deploying n8n on a Google Cloud virtual machine was one of the most valuable projects in my learning journey. In addition to building a functional automation platform, I gained practical experience in server administration, cloud computing, Docker, databases, and solving real infrastructure problems.
+
+Projects like this help me better understand how modern cloud services are built and operated — and documenting them here helps me consolidate what I have learned.

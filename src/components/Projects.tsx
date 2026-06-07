@@ -2,17 +2,21 @@
 
 import Link from "next/link";
 import type { Project } from "@/types";
+import type { Locale } from "@/i18n";
+import { defaultLocale } from "@/i18n";
 import { SectionTitle } from "./SectionTitle";
 import { ProjectCard } from "./ProjectCard";
 import { ContentEmptyState } from "./ContentEmptyState";
-import { useTranslations } from "@/providers/LocaleProvider";
+import { useLocale, useTranslations } from "@/providers/LocaleProvider";
 
 interface ProjectsProps {
-  projects: Project[];
+  projectsByLocale: Record<Locale, Project[]>;
 }
 
-export function Projects({ projects }: ProjectsProps) {
+export function Projects({ projectsByLocale }: ProjectsProps) {
   const t = useTranslations();
+  const { locale } = useLocale();
+  const projects = projectsByLocale[locale] ?? projectsByLocale[defaultLocale];
 
   return (
     <section id="proyectos" className="border-b border-border bg-transparent py-20 sm:py-24">

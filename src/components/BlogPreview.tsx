@@ -2,18 +2,21 @@
 
 import Link from "next/link";
 import type { BlogPost } from "@/types";
+import type { Locale } from "@/i18n";
+import { defaultLocale } from "@/i18n";
 import { formatDate } from "@/lib/utils";
 import { SectionTitle } from "./SectionTitle";
 import { ContentEmptyState } from "./ContentEmptyState";
 import { useLocale, useTranslations } from "@/providers/LocaleProvider";
 
 interface BlogPreviewProps {
-  posts: BlogPost[];
+  postsByLocale: Record<Locale, BlogPost[]>;
 }
 
-export function BlogPreview({ posts }: BlogPreviewProps) {
+export function BlogPreview({ postsByLocale }: BlogPreviewProps) {
   const t = useTranslations();
   const { locale } = useLocale();
+  const posts = postsByLocale[locale] ?? postsByLocale[defaultLocale];
 
   return (
     <section id="blog" className="border-b border-border bg-transparent py-20 sm:py-24">

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getAllPosts } from "@/lib/content";
+import { getAllPostsByLocale } from "@/lib/content";
 import { BlogPageContent } from "@/components/content/BlogPageContent";
 
 export const metadata: Metadata = {
@@ -8,6 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPage() {
-  const posts = getAllPosts();
-  return <BlogPageContent posts={posts} />;
+  const postsByLocale = getAllPostsByLocale();
+  return <BlogPageContent postsByLocale={postsByLocale} />;
 }

@@ -5,12 +5,18 @@ export function cn(...classes: (string | boolean | undefined | null)[]): string 
   return classes.filter(Boolean).join(" ");
 }
 
+/** Interpreta YYYY-MM-DD como fecha calendario local (evita desfase UTC). */
+function parseContentDate(date: string): Date {
+  const [year, month, day] = date.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
 export function formatDate(date: string, locale: Locale = "es"): string {
   return new Intl.DateTimeFormat(locale === "en" ? "en-US" : "es-ES", {
     year: "numeric",
     month: "long",
     day: "numeric",
-  }).format(new Date(date));
+  }).format(parseContentDate(date));
 }
 
 export function getStatusColor(status: ProjectStatus): string {

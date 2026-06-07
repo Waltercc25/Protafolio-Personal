@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  compileMdxSource,
-  extractHeadings,
-  getAllPosts,
-  getPostSource,
-} from "@/lib/content";
+import { getAllPosts } from "@/lib/content";
+import { buildBlogPostVersions } from "@/lib/content/locale-pages";
 import { BlogPostLayout } from "@/components/content/BlogPostLayout";
 
 interface PageProps {
@@ -18,28 +14,20 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const source = getPostSource(slug);
-  if (!source) return { title: "Artículo no encontrado" };
+  const versions = await buildBlogPostVersions(slug);
+  const post = versions?.es?.meta ?? versions?.en?.meta;
+  if (!post) return { title: "Artículo no encontrado" };
   return {
-    title: source.frontmatter.title,
-    description: source.frontmatter.description,
+    title: post.title,
+    description: post.description,
   };
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
-  const source = getPostSource(slug);
+  const versions = await buildBlogPostVersions(slug);
 
-  if (!source) notFound();
+  if (!versions) notFound();
 
-  const headings = extractHeadings(source.body);
-  const content = await compileMdxSource(source.body);
-
-  return (
-    <BlogPostLayout
-      post={source.frontmatter}
-      content={content}
-      headings={headings}
-    />
-  );
+  return <BlogPostLayout versions={versions} />;
 }

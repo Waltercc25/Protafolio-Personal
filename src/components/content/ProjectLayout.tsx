@@ -1,21 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import type { Project, ContentHeading } from "@/types";
+import type { MdxPageVersion, Project } from "@/types";
+import type { Locale } from "@/i18n";
+import { defaultLocale } from "@/i18n";
 import { getStatusColor, cn } from "@/lib/utils";
 import { TechBadge } from "@/components/TechBadge";
 import { MdxProse } from "@/components/mdx";
 import { TableOfContents } from "@/components/mdx/TableOfContents";
-import { useTranslations } from "@/providers/LocaleProvider";
+import { useLocale, useTranslations } from "@/providers/LocaleProvider";
 
 interface ProjectLayoutProps {
-  project: Project;
-  content: React.ReactNode;
-  headings: ContentHeading[];
+  versions: Partial<Record<Locale, MdxPageVersion<Project>>>;
 }
 
-export function ProjectLayout({ project, content, headings }: ProjectLayoutProps) {
+export function ProjectLayout({ versions }: ProjectLayoutProps) {
   const t = useTranslations();
+  const { locale } = useLocale();
+  const version = versions[locale] ?? versions[defaultLocale];
+
+  if (!version) return null;
+
+  const { meta: project, content, headings } = version;
 
   return (
     <article className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
@@ -42,13 +48,9 @@ export function ProjectLayout({ project, content, headings }: ProjectLayoutProps
             </span>
           </div>
 
-          <h1 className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">
-            {project.title}
-          </h1>
+          <h1 className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">{project.title}</h1>
 
-          <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-            {project.description}
-          </p>
+          <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{project.description}</p>
 
           <div className="mt-6 flex flex-wrap gap-2">
             {project.technologies.map((tech) => (

@@ -1,21 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import type { BlogPost, ContentHeading } from "@/types";
+import type { BlogPost, MdxPageVersion } from "@/types";
+import type { Locale } from "@/i18n";
+import { defaultLocale } from "@/i18n";
 import { formatDate } from "@/lib/utils";
 import { MdxProse } from "@/components/mdx";
 import { TableOfContents } from "@/components/mdx/TableOfContents";
 import { useLocale, useTranslations } from "@/providers/LocaleProvider";
 
 interface BlogPostLayoutProps {
-  post: BlogPost;
-  content: React.ReactNode;
-  headings: ContentHeading[];
+  versions: Partial<Record<Locale, MdxPageVersion<BlogPost>>>;
 }
 
-export function BlogPostLayout({ post, content, headings }: BlogPostLayoutProps) {
+export function BlogPostLayout({ versions }: BlogPostLayoutProps) {
   const t = useTranslations();
   const { locale } = useLocale();
+  const version = versions[locale] ?? versions[defaultLocale];
+
+  if (!version) return null;
+
+  const { meta: post, content, headings } = version;
 
   return (
     <article className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
@@ -38,13 +43,9 @@ export function BlogPostLayout({ post, content, headings }: BlogPostLayoutProps)
             </span>
           </div>
 
-          <h1 className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">
-            {post.title}
-          </h1>
+          <h1 className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">{post.title}</h1>
 
-          <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-            {post.description}
-          </p>
+          <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{post.description}</p>
 
           <MdxProse className="mt-12">{content}</MdxProse>
         </div>

@@ -2,17 +2,21 @@
 
 import Link from "next/link";
 import type { Project } from "@/types";
+import type { Locale } from "@/i18n";
+import { defaultLocale } from "@/i18n";
 import { ProjectCard } from "@/components/ProjectCard";
 import { SectionTitle } from "@/components/SectionTitle";
 import { ContentEmptyState } from "@/components/ContentEmptyState";
-import { useTranslations } from "@/providers/LocaleProvider";
+import { useTranslations, useLocale } from "@/providers/LocaleProvider";
 
 interface ProyectosPageContentProps {
-  projects: Project[];
+  projectsByLocale: Record<Locale, Project[]>;
 }
 
-export function ProyectosPageContent({ projects }: ProyectosPageContentProps) {
+export function ProyectosPageContent({ projectsByLocale }: ProyectosPageContentProps) {
   const t = useTranslations();
+  const { locale } = useLocale();
+  const projects = projectsByLocale[locale] ?? projectsByLocale[defaultLocale];
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
