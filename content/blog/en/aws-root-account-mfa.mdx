@@ -1,0 +1,107 @@
+---
+title: "Why the AWS Root Account Should Be Used as Little as Possible"
+description: "One of the first lessons I learned while studying AWS was the importance of protecting the Root account and limiting its use to exceptional administrative tasks only."
+date: "2026-07-09"
+category: "AWS"
+readTime: "6 min"
+featured: true
+published: true
+---
+
+## Introduction
+
+While preparing for the **AWS Certified Cloud Practitioner** certification, one of the first recommendations I came across was to avoid using the **Root** account for everyday work.
+
+At first I thought it was just a suggestion, but as I dug deeper I understood that it is one of AWS's core security best practices. The Root account has full access to every resource in the account and represents one of the most critical assets an administrator must protect.
+
+## What is the Root account?
+
+The Root account is the first identity created when you sign up for [AWS](https://aws.amazon.com/).
+
+It has unlimited access to all services and account settings, so it can perform actions that no other user can execute without equivalent permissions.
+
+Some of its capabilities include:
+
+- Creating or deleting resources
+- Modifying general account settings
+- Managing billing information
+- Closing the AWS account
+- Changing critical security-related settings
+
+Because of this level of privilege, AWS recommends using it only when strictly necessary.
+
+## Why shouldn't I use the Root account every day?
+
+Using the Root account for daily activities increases the risk of compromising your entire infrastructure.
+
+If credentials were stolen or exposed, an attacker could:
+
+- Delete virtual machines (EC2)
+- Remove databases
+- Delete Amazon S3 buckets
+- Modify security policies
+- Change billing settings
+- Disrupt business-critical services
+
+In an enterprise environment, an incident like this could seriously affect business continuity.
+
+<Callout variant="warning" title="Real risk">
+  The Root account has no permission restrictions. Human error or compromised credentials can have an immediate impact on the entire account, not just a single service.
+</Callout>
+
+## Best practice: use IAM
+
+Instead of working directly with the Root account, AWS recommends creating users through **IAM (Identity and Access Management)**.
+
+Each user should receive only the permissions needed to do their job, applying the **Least Privilege** principle.
+
+This approach:
+
+- Reduces the risk of mistakes
+- Improves control over who performs each action
+- Makes it possible to audit each user's activity
+- Limits the impact if an account is compromised
+
+## Protect the Root account with MFA
+
+Another fundamental practice is enabling **MFA (Multi-Factor Authentication)** on the Root account.
+
+MFA adds a second layer of authentication beyond the password. That means even if someone obtains the Root account credentials, they still need a second verification factor to sign in.
+
+Some MFA options include:
+
+- Authenticator apps (for example, Google Authenticator or Authy)
+- Physical security keys
+- FIDO-compatible devices
+
+<Callout variant="tip" title="Do it from day one">
+  Enable MFA on the Root account as soon as you create your AWS account. It is one of the highest return-on-effort security actions you can take when getting started.
+</Callout>
+
+## What I learned
+
+Before studying AWS, I assumed the main account should be used to manage all services.
+
+I later understood that AWS's philosophy is different: the Root account should be reserved for exceptional administrative tasks, and daily work should be done through users or roles with specific permissions.
+
+This approach reduces risk, improves security, and makes infrastructure administration easier.
+
+## Best practices
+
+These are some recommendations I consider essential:
+
+- Use the Root account only when necessary
+- Enable MFA from day one
+- Create IAM users for daily work
+- Apply the least privilege principle
+- Do not share Root account credentials
+- Store credentials in a secure place
+- Periodically review account security
+
+## Conclusion
+
+Understanding the importance of the Root account was one of the first security lessons I learned during my AWS training.
+
+Although it may seem like a simple detail, using the Root account correctly and protecting it properly is essential for managing any cloud environment responsibly and securely.
+
+It is a basic concept, but it is the starting point for building a more secure cloud infrastructure.

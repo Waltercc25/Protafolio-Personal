@@ -1,0 +1,107 @@
+---
+title: "Por qué la cuenta Root de AWS debe usarse lo menos posible"
+description: "Una de las primeras lecciones que aprendí al estudiar AWS fue la importancia de proteger la cuenta Root y limitar su uso únicamente a tareas administrativas excepcionales."
+date: "2026-07-09"
+category: "AWS"
+readTime: "6 min"
+featured: true
+published: true
+---
+
+## Introducción
+
+Durante mi proceso de aprendizaje para la certificación **AWS Certified Cloud Practitioner**, una de las primeras recomendaciones que encontré fue evitar el uso cotidiano de la cuenta **Root**.
+
+Al principio pensé que era simplemente una sugerencia, pero al profundizar comprendí que se trata de una de las mejores prácticas de seguridad dentro de AWS. La cuenta Root tiene acceso completo a todos los recursos de la cuenta y representa uno de los activos más críticos que un administrador debe proteger.
+
+## ¿Qué es la cuenta Root?
+
+La cuenta Root es la primera identidad que se crea al registrarse en [AWS](https://aws.amazon.com/).
+
+Tiene acceso ilimitado a todos los servicios y configuraciones de la cuenta, por lo que puede realizar acciones que ningún otro usuario puede ejecutar sin permisos equivalentes.
+
+Entre algunas de sus capacidades se encuentran:
+
+- Crear o eliminar recursos
+- Modificar la configuración general de la cuenta
+- Administrar la información de facturación
+- Cerrar la cuenta de AWS
+- Cambiar configuraciones críticas relacionadas con la seguridad
+
+Precisamente por este nivel de privilegios, AWS recomienda utilizarla únicamente cuando sea estrictamente necesario.
+
+## ¿Por qué no debería utilizar la cuenta Root todos los días?
+
+Usar la cuenta Root para actividades cotidianas aumenta el riesgo de comprometer toda la infraestructura.
+
+Si las credenciales fueran robadas o expuestas, un atacante podría:
+
+- Eliminar máquinas virtuales (EC2)
+- Borrar bases de datos
+- Eliminar buckets de Amazon S3
+- Modificar políticas de seguridad
+- Cambiar configuraciones de facturación
+- Interrumpir servicios críticos para una empresa
+
+En un entorno empresarial, un incidente de este tipo podría afectar seriamente la continuidad del negocio.
+
+<Callout variant="warning" title="Riesgo real">
+  La cuenta Root no tiene restricciones de permisos. Un error humano o una credencial comprometida puede tener impacto inmediato sobre toda la cuenta, no solo sobre un servicio aislado.
+</Callout>
+
+## La mejor práctica: utilizar IAM
+
+En lugar de trabajar directamente con la cuenta Root, AWS recomienda crear usuarios mediante **IAM (Identity and Access Management)**.
+
+Cada usuario debe recibir únicamente los permisos necesarios para realizar su trabajo, aplicando el principio de **mínimo privilegio (Least Privilege)**.
+
+De esta manera:
+
+- Se reduce el riesgo de errores
+- Se mejora el control sobre quién realiza cada acción
+- Se pueden auditar las actividades de cada usuario
+- Se limita el impacto en caso de que una cuenta sea comprometida
+
+## Proteger la cuenta Root con MFA
+
+Otra práctica fundamental consiste en habilitar **MFA (Multi-Factor Authentication)** en la cuenta Root.
+
+El MFA añade una segunda capa de autenticación además de la contraseña. Esto significa que, incluso si alguien obtiene las credenciales de la cuenta Root, necesitará un segundo factor de verificación para iniciar sesión.
+
+Algunas opciones de MFA son:
+
+- Aplicaciones autenticadoras (por ejemplo, Google Authenticator o Authy)
+- Llaves de seguridad físicas
+- Dispositivos compatibles con FIDO
+
+<Callout variant="tip" title="Hazlo desde el primer día">
+  Habilita MFA en la cuenta Root en cuanto crees tu cuenta de AWS. Es una de las acciones de seguridad con mejor relación esfuerzo-beneficio que puedes aplicar al empezar.
+</Callout>
+
+## Lo que aprendí
+
+Antes de estudiar AWS pensaba que la cuenta principal debía utilizarse para administrar todos los servicios.
+
+Sin embargo, comprendí que la filosofía de AWS es diferente: la cuenta Root debe reservarse para tareas administrativas excepcionales y el trabajo diario debe realizarse mediante usuarios o roles con permisos específicos.
+
+Este enfoque reduce riesgos, mejora la seguridad y facilita la administración de la infraestructura.
+
+## Buenas prácticas
+
+Estas son algunas recomendaciones que considero fundamentales:
+
+- Utilizar la cuenta Root únicamente cuando sea necesario
+- Habilitar MFA desde el primer día
+- Crear usuarios IAM para el trabajo diario
+- Aplicar el principio de mínimo privilegio
+- No compartir las credenciales de la cuenta Root
+- Almacenar las credenciales en un lugar seguro
+- Revisar periódicamente la seguridad de la cuenta
+
+## Conclusión
+
+Comprender la importancia de la cuenta Root fue una de las primeras lecciones de seguridad que aprendí durante mi formación en AWS.
+
+Aunque puede parecer un detalle sencillo, utilizar correctamente la cuenta Root y protegerla adecuadamente representa una práctica esencial para administrar cualquier entorno en la nube de forma responsable y segura.
+
+Es un concepto básico, pero constituye el punto de partida para construir una infraestructura cloud más segura.
