@@ -1,0 +1,124 @@
+---
+
+title: "Comprendiendo los Security Groups en AWS: una de las primeras capas de seguridad"
+description: "Durante mi aprendizaje de AWS descubrí que los Security Groups son uno de los mecanismos más importantes para controlar el acceso a las instancias EC2 y proteger los recursos en la nube."
+date: "2026-07-10"
+category: "Cloud - AWS"
+readTime: "6 min"
+featured: true
+published: true
+---
+technologies:
+
+* AWS
+* EC2
+* Security Groups
+* VPC
+  featured: true
+
+---
+
+# Comprendiendo los Security Groups en AWS: una de las primeras capas de seguridad
+
+## Introducción
+
+A medida que he avanzado en mi aprendizaje de **AWS Certified Cloud Practitioner**, uno de los conceptos que más me ha llamado la atención es el funcionamiento de los **Security Groups**.
+
+Al principio pensaba que simplemente eran una lista de puertos abiertos, pero conforme fui realizando laboratorios con instancias EC2 comprendí que representan una de las primeras capas de seguridad que protegen los recursos dentro de una VPC.
+
+Comprender cómo funcionan es fundamental para desplegar aplicaciones de forma segura en la nube.
+
+---
+
+## ¿Qué es un Security Group?
+
+Un **Security Group** es un firewall virtual que controla el tráfico que puede entrar y salir de una instancia de Amazon EC2.
+
+En lugar de instalar un firewall dentro del sistema operativo, AWS permite administrar el acceso directamente desde la infraestructura de la nube mediante reglas que especifican:
+
+* Qué protocolo se utilizará.
+* Qué puerto estará disponible.
+* Qué direcciones IP podrán establecer la comunicación.
+
+Gracias a este modelo, es posible controlar quién puede acceder a una aplicación incluso antes de que el tráfico llegue al servidor.
+
+---
+
+## Reglas de entrada (Inbound Rules)
+
+Uno de los primeros aspectos que aprendí es que, por defecto, una instancia EC2 no acepta conexiones entrantes.
+
+Esto significa que, aunque una aplicación web esté instalada y funcionando correctamente, nadie podrá acceder a ella hasta que se agreguen las reglas correspondientes en el Security Group.
+
+Por ejemplo, si una página web se encuentra alojada en una instancia EC2, será necesario permitir el tráfico HTTP para que otros usuarios puedan visualizarla.
+
+Algunas reglas comunes son:
+
+| Protocolo | Puerto | Uso                                       |
+| --------- | ------ | ----------------------------------------- |
+| HTTP      | 80     | Sitios web sin cifrado                    |
+| HTTPS     | 443    | Sitios web seguros                        |
+| SSH       | 22     | Administración remota de servidores Linux |
+| RDP       | 3389   | Acceso remoto a servidores Windows        |
+
+Durante mis laboratorios comprobé que, aunque el servidor estuviera funcionando correctamente, olvidarse de abrir el puerto adecuado impedía completamente el acceso al servicio.
+
+---
+
+## Reglas de salida (Outbound Rules)
+
+Otro concepto que me pareció muy interesante es el comportamiento **stateful** de los Security Groups.
+
+Por defecto, las reglas de salida permiten que las instancias inicien conexiones hacia otros servicios.
+
+Además, cuando un Security Group permite una conexión entrante, AWS recuerda automáticamente esa comunicación y permite que la respuesta salga sin necesidad de crear una regla adicional para ese mismo flujo.
+
+Esto simplifica considerablemente la administración y evita configuraciones innecesarias para el tráfico de respuesta.
+
+---
+
+## Reutilización de Security Groups
+
+Otra característica que considero muy útil es que un mismo Security Group puede asociarse a varias instancias EC2.
+
+Esto significa que no es necesario crear un grupo diferente para cada servidor.
+
+Por ejemplo, si varias instancias alojan aplicaciones web con la misma configuración de acceso, todas pueden compartir el mismo Security Group.
+
+Este enfoque facilita la administración y mantiene una configuración consistente entre diferentes recursos.
+
+---
+
+## Buenas prácticas que aprendí
+
+Durante mis prácticas encontré varias recomendaciones que considero importantes:
+
+* Abrir únicamente los puertos estrictamente necesarios.
+* Evitar exponer servicios que no serán utilizados.
+* Utilizar HTTPS siempre que sea posible para proteger la información transmitida.
+* Mantener una estructura organizada de Security Groups para facilitar su administración.
+* Revisar periódicamente las reglas configuradas para eliminar accesos que ya no sean necesarios.
+
+Estas prácticas ayudan a reducir la superficie de ataque y mejoran la seguridad general de la infraestructura.
+
+---
+
+## Lo que aprendí
+
+Antes de comenzar a trabajar con AWS pensaba que bastaba con instalar una aplicación dentro de una máquina virtual para que estuviera disponible en Internet.
+
+Sin embargo, comprendí que el acceso a una instancia depende de varios componentes, y uno de los más importantes son los Security Groups.
+
+Aprendí que una aplicación puede estar funcionando perfectamente, pero permanecer completamente inaccesible si el puerto correspondiente no ha sido autorizado mediante las reglas de entrada.
+
+También comprendí la importancia del modelo **stateful**, que simplifica la administración de las respuestas del tráfico y hace que los Security Groups sean una solución eficiente y fácil de gestionar.
+
+---
+
+## Conclusión
+
+Los Security Groups son una de las primeras líneas de defensa dentro de una infraestructura en AWS y constituyen un concepto esencial para cualquier persona que esté comenzando a trabajar con Amazon EC2.
+
+Más allá de abrir o cerrar puertos, representan un mecanismo de control que permite proteger aplicaciones y servidores antes de que el tráfico llegue al sistema operativo.
+
+Comprender su funcionamiento me ha permitido entender mejor cómo AWS implementa la seguridad en la nube y la importancia de aplicar el principio de **permitir únicamente el acceso necesario**, una práctica fundamental en cualquier entorno de infraestructura moderno.
